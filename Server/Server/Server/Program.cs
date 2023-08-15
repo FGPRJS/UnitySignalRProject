@@ -1,5 +1,6 @@
 
 
+using Server.Hubs;
 using Server.Manager;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddSignalRCore();
+builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<GameConstantManager>();
 builder.Services.AddSingleton<GameServerManager>();
@@ -25,5 +26,7 @@ app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<GameServerHub>("/gameserver");
 
 app.Run();

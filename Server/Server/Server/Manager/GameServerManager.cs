@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Numerics;
+using Protocol.MessageBody;
 
 namespace Server.Manager
 {
@@ -44,11 +45,5 @@ namespace Server.Manager
 
             return newUser;
         }
-    }
-
-    public class GameUser
-    {
-        public string token { get; set; }
-        public Vector3 position { get; set; }
     }
 }

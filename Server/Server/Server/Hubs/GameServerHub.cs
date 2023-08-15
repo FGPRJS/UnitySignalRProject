@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Protocol;
 using Server.Manager;
 
 namespace Server.Hubs
@@ -12,16 +13,11 @@ namespace Server.Hubs
             this._gameServerManager = gameServerManager;
         }
 
-        public async Task ConnectToServer()
+        public async Task Connect()
         {
             var newUser = this._gameServerManager.CreateGameUser();
 
             await Clients.All.SendCoreAsync(MessageNameKey.UserConnected, new object?[]{newUser});
         }
-    }
-
-    internal class MessageNameKey
-    {
-        public const string UserConnected = "UserConnected";
     }
 }

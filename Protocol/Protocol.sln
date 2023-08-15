@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol", "Protocol\Protocol.csproj", "{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ReleaseClient|Any CPU = ReleaseClient|Any CPU
+		ReleaseServer|Any CPU = ReleaseServer|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}.ReleaseClient|Any CPU.ActiveCfg = ReleaseClient|Any CPU
+		{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}.ReleaseClient|Any CPU.Build.0 = ReleaseClient|Any CPU
+		{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}.ReleaseServer|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC24434-A9B1-4AD4-A8BA-A1C0DA16B922}.ReleaseServer|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE47F0C9-AF7A-4AAB-95CD-D4C2FC9BB683}
+	EndGlobalSection
+EndGlobal

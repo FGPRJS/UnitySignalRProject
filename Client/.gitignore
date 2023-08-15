@@ -181,4 +181,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,unity,rider
 
 # Remove resources
-Assets/Resources/*
+Assets/Imports/*
