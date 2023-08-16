@@ -13,33 +13,24 @@ namespace GameObjects.Managers
     public class GameSceneManager : MonoBehaviour
     {
         public static GameSceneManager instance;
-        
-        private ConnectionManager connectionManager;
 
-        private void OnEnable()
+        void Awake()
         {
-            
-        }
-
-        public void Initialize()
-        {
-            DontDestroyOnLoad(this);
-            instance = this;
-            
-            connectionManager = ConnectionManager.instance;
-            
-            connectionManager.connectionMessage.AddListener((message) =>
+            if (instance != null)
             {
-                switch (message.messageName)
-                {
-                    case Protocol.MessageNameKey.ConnectToServerComplete:
-                        StartCoroutine(LoadScene(GameSceneName.MainScene));
-                        break;
-                }
-            });
+                return;
+            }
+            
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+
+        public void LoadScene(GameSceneName sceneName)
+        {
+            StartCoroutine(LoadSceneCoroutine(sceneName));
         }
         
-        private IEnumerator LoadScene(GameSceneName sceneName)
+        private IEnumerator LoadSceneCoroutine(GameSceneName sceneName)
         {
             var asyncLoad = SceneManager.LoadSceneAsync(sceneName.ToString(), LoadSceneMode.Single);
             Debug.Log(asyncLoad.progress);
@@ -48,8 +39,6 @@ namespace GameObjects.Managers
             {
                 yield return null;
             }
-
-            
         }
     }
 }

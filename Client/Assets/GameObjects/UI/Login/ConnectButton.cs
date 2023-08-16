@@ -1,4 +1,6 @@
+using System.Collections;
 using GameObjects.Managers;
+using Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,14 +9,29 @@ namespace GameObjects.UI.Login
     public class ConnectButton : MonoBehaviour
     {
         public Button button;
-        public ConnectionManager connectionManager;
         
-        private void Awake()
+        private void Start()
         {
-            this.button.onClick.AddListener(() =>
+            button.enabled = false;
+            
+            StartCoroutine(WaitForConnectionManager());
+        }
+        
+        IEnumerator WaitForConnectionManager()
+        {
+            while((ConnectionManager.instance == null) 
+                  || (ConnectionManager.instance.signalR == null))
             {
-                this.connectionManager.Connect();
+                yield return null;
+            }
+            
+            button.onClick.AddListener(() =>
+            {
+                ConnectionManager.instance.signalR
+                    .Invoke(MessageNameKey.FirstAccessInfo, "Dummy1");
             });
+
+            button.enabled = true;
         }
     }
 }

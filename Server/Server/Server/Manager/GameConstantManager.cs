@@ -11,14 +11,14 @@ namespace Server.Manager
             this._gameConstants = new ConcurrentDictionary<string, string>(
                 new []
                 {
-                    new KeyValuePair<string, string>(GameConstantKey.UserTokenLength,"16"),
+                    new KeyValuePair<string, string>(GameConstantKey.UserIdLength,"16"),
                     new KeyValuePair<string, string>(GameConstantKey.RoomTokenLength,"9"),
                     new KeyValuePair<string, string>(GameConstantKey.MaxUserCount,"16"),
 
-                    new KeyValuePair<string, string>(GameConstantKey.SpawnXPosMax,"300"),
-                    new KeyValuePair<string, string>(GameConstantKey.SpawnXPosMin,"600"),
-                    new KeyValuePair<string, string>(GameConstantKey.SpawnYPosMax,"300"),
-                    new KeyValuePair<string, string>(GameConstantKey.SpawnYPosMin,"600"),
+                    new KeyValuePair<string, string>(GameConstantKey.SpawnXPosMin,"300"),
+                    new KeyValuePair<string, string>(GameConstantKey.SpawnXPosMax,"600"),
+                    new KeyValuePair<string, string>(GameConstantKey.SpawnYPosMin,"300"),
+                    new KeyValuePair<string, string>(GameConstantKey.SpawnYPosMax,"600"),
 
                     new KeyValuePair<string, string>(GameConstantKey.SpawnZPos,"100")
                 });
@@ -39,7 +39,7 @@ namespace Server.Manager
 
     public class GameConstantKey
     {
-        public const string UserTokenLength = "UserTokenLength";
+        public const string UserIdLength = "UserIdLength";
         public const string RoomTokenLength = "RoomTokenLength";
         public const string MaxUserCount = "MaxUserCount";
 

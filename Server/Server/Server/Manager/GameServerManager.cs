@@ -1,6 +1,6 @@
-﻿using System.Collections.Concurrent;
-using System.Numerics;
+﻿using Mapster;
 using Protocol.MessageBody;
+using System.Collections.Concurrent;
 
 namespace Server.Manager
 {
@@ -21,29 +21,40 @@ namespace Server.Manager
             _gameConstantManager = gameConstantManager;
         }
 
-        public GameUser CreateGameUser()
+        public GameUserDto CreateGameUser(string connectionId, string nickname)
         {
-            var newUserToken = new string(Enumerable.Repeat(
-                    _chars,
-                    _gameConstantManager.GetGameConstant<int>(GameConstantKey.UserTokenLength))
-                .Select(s => s[this._random.Next(s.Length)]).ToArray());
+            var xPos = this._random.Next(
+                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnXPosMin),
+                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnXPosMax));
+            var yPos = this._random.Next(
+                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnYPosMin),
+                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnYPosMax));
+            var zPos = _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnZPos).ToString();
 
             var newUser = new GameUser
             {
-                token = newUserToken,
-                position = new Vector3(
-                    this._random.Next(
-                        _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnXPosMin),
-                        _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnXPosMax)),
-                    this._random.Next(
-                        _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnYPosMin),
-                        _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnYPosMax)),
-                    _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnZPos))
+                connectionId = connectionId,
+                userId = new string(Enumerable.Repeat(_chars, _gameConstantManager.GetGameConstant<int>(GameConstantKey.UserIdLength))
+                    .Select(s => s[_random.Next(s.Length)]).ToArray()),
+                nickname = nickname,
+                positionString = $"{xPos},{yPos},{zPos}"
             };
+            
+            _userInfo.TryAdd(connectionId, newUser);
+            
+            return newUser.Adapt<GameUserDto>();
+        }
 
-            this._userInfo.TryAdd(newUserToken, newUser);
+        public List<GameUserDto> GetAllUsers()
+        {
+            return this._userInfo.Values.ToList().Adapt<List<GameUserDto>>();
+        }
 
-            return newUser;
+        public GameUserDto? RemoveGameUser(string connectionId)
+        {
+            this._userInfo.TryRemove(connectionId, out var user);
+
+            return user?.Adapt<GameUserDto>();
         }
     }
 }

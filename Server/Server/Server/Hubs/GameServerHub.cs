@@ -13,11 +13,27 @@ namespace Server.Hubs
             this._gameServerManager = gameServerManager;
         }
 
-        public async Task Connect()
+        public async Task FirstAccessInfo(string nickname)
         {
-            var newUser = this._gameServerManager.CreateGameUser();
+            var newUser = this._gameServerManager.CreateGameUser(Context.ConnectionId, nickname);
+            var allUser = this._gameServerManager.GetAllUsers();
 
-            await Clients.All.SendCoreAsync(MessageNameKey.UserConnected, new object?[]{newUser});
+            await Clients.Caller.SendAsync(MessageNameKey.FirstAccessInfo, newUser, allUser);
+            await Clients.Others.SendAsync(MessageNameKey.UserConnected, newUser);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            var disconnectedGameUser = this._gameServerManager.RemoveGameUser(Context.ConnectionId);
+
+            await Clients.Others.SendAsync(MessageNameKey.UserDisconnected, disconnectedGameUser);
+
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }
