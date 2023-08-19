@@ -23,21 +23,13 @@ namespace Server.Manager
 
         public GameUserDto CreateGameUser(string connectionId, string nickname)
         {
-            var xPos = this._random.Next(
-                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnXPosMin),
-                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnXPosMax));
-            var yPos = this._random.Next(
-                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnYPosMin),
-                _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnYPosMax));
-            var zPos = _gameConstantManager.GetGameConstant<int>(GameConstantKey.SpawnZPos).ToString();
-
             var newUser = new GameUser
             {
                 connectionId = connectionId,
                 userId = new string(Enumerable.Repeat(_chars, _gameConstantManager.GetGameConstant<int>(GameConstantKey.UserIdLength))
                     .Select(s => s[_random.Next(s.Length)]).ToArray()),
                 nickname = nickname,
-                positionString = $"{xPos},{yPos},{zPos}"
+                spawnToken = this._random.Next()
             };
             
             _userInfo.TryAdd(connectionId, newUser);

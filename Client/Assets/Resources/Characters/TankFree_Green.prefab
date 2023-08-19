@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: -5046844096244166053}
   m_Layer: 0
   m_Name: TankFree_Green
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -286,9 +286,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3354916976622783175}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 10
+  m_Drag: 30
+  m_AngularDrag: 0.3
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -317,6 +317,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c169abc6c1c6adf49a287b51dc03de45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 3354916976622783175}
+  head: {fileID: 4326378089990777302}
+  cannon: {fileID: 3916225007155662313}
+  _rBody: {fileID: 1234674283492319792}
+  _rHead: {fileID: 0}
+  _rCannon: {fileID: 0}
 --- !u!1 &3916225007155662313
 GameObject:
   m_ObjectHideFlags: 0

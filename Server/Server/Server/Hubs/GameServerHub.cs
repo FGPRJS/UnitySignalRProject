@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Protocol;
+using Protocol.MessageBody;
 using Server.Manager;
 
 namespace Server.Hubs
