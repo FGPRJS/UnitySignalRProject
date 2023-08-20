@@ -29,7 +29,8 @@ namespace Server.Manager
                 userId = new string(Enumerable.Repeat(_chars, _gameConstantManager.GetGameConstant<int>(GameConstantKey.UserIdLength))
                     .Select(s => s[_random.Next(s.Length)]).ToArray()),
                 nickname = nickname,
-                spawnToken = this._random.Next()
+                spawnToken = this._random.Next(),
+                spawnTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
             };
             
             _userInfo.TryAdd(connectionId, newUser);

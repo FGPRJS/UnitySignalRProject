@@ -8,6 +8,7 @@
         public string nickname { get; set; }
 
         public int spawnToken { get; set; }
+        public long spawnTime { get; set; }
 
         public string? positionString { get; set; }
         public string? bodyRotationString { get; set; }
@@ -22,6 +23,7 @@
 
 
         public int spawnToken { get; set; }
+        public long spawnTime { get; set; }
 
         public string positionString { get; set; }
         public string bodyRotationString { get; set; }

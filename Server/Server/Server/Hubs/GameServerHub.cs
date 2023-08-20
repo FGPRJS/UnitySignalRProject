@@ -14,14 +14,7 @@ namespace Server.Hubs
             this._gameServerManager = gameServerManager;
         }
 
-        public async Task FirstAccessInfo(string nickname)
-        {
-            var newUser = this._gameServerManager.CreateGameUser(Context.ConnectionId, nickname);
-            var allUser = this._gameServerManager.GetAllUsers();
-
-            await Clients.Caller.SendAsync(MessageNameKey.FirstAccessInfo, newUser, allUser);
-            await Clients.Others.SendAsync(MessageNameKey.UserConnected, newUser);
-        }
+        #region Connection
 
         public override async Task OnConnectedAsync()
         {
@@ -36,5 +29,22 @@ namespace Server.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
+
+        #endregion
+
+        public async Task FirstAccessInfo(string nickname)
+        {
+            var newUser = this._gameServerManager.CreateGameUser(Context.ConnectionId, nickname);
+            var allUser = this._gameServerManager.GetAllUsers();
+
+            await Clients.Caller.SendAsync(MessageNameKey.FirstAccessInfo, newUser, allUser);
+            await Clients.Others.SendAsync(MessageNameKey.UserConnected, newUser);
+        }
+
+        public async Task CharacterMovement(CharacterMovement movement)
+        {
+            await Clients.All.SendAsync(MessageNameKey.CharacterMovement, movement);
+        }
+               
     }
 }

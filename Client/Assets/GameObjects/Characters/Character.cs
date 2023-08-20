@@ -1,11 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace GameObjects.Characters
 {
     public class Character : MonoBehaviour
     {
-        private PlayerInputActions _playerInputActions;
-        
         [Header("[GameObjects]")]
         public GameObject body;
         public GameObject head;
@@ -18,31 +17,14 @@ namespace GameObjects.Characters
         private Rigidbody _rHead;
         [SerializeField]
         private Rigidbody _rCannon;
-        private Vector2 _moveInput;
 
         private float moveSpeed = 2.0f;
         private float rotateSpeed = 1.0f;
 
-        private void Awake()
+        public void MoveCharacter(Vector2 movement)
         {
-            this._playerInputActions = new PlayerInputActions();
-        }
-
-        private void OnEnable()
-        {
-            this._playerInputActions.Character.Enable();
-        }
-
-        private void OnDisable()
-        {
-            this._playerInputActions.Character.Disable();
-        }
-
-        private void FixedUpdate()
-        {
-            this._moveInput = this._playerInputActions.Character.Move.ReadValue<Vector2>();
-            this._rBody.velocity += this._rBody.transform.forward * (this._moveInput.y * this.moveSpeed);
-            this._rBody.rotation *= Quaternion.Euler(Vector3.up * (this._moveInput.x * rotateSpeed));
+            this._rBody.velocity += this._rBody.transform.forward * (movement.y * this.moveSpeed);
+            this._rBody.rotation *= Quaternion.Euler(Vector3.up * (movement.x * rotateSpeed));
         }
     }
 }

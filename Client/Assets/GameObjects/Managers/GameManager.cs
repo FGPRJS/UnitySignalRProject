@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GameObjects.Characters;
 using Protocol;
 using Protocol.MessageBody;
 using UnityEngine;
@@ -12,9 +13,9 @@ namespace GameObjects.Managers
     {
         public static GameManager instance;
 
-        public GameUserDto currentUser { get; private set; }
-        public Dictionary<string, GameUserDto> otherUsers { get; private set; }
-
+        public GameUserDto currentPlayer { get; private set; }
+        public Dictionary<string, GameUserDto> otherPlayers { get; private set; }
+        
         private void Awake()
         {
             if (instance == null)
@@ -23,14 +24,15 @@ namespace GameObjects.Managers
                 DontDestroyOnLoad(this);
             }
 
-            otherUsers = new Dictionary<string, GameUserDto>();
+            otherPlayers = new Dictionary<string, GameUserDto>();
             StartCoroutine(WaitForConnectionManager());
         }
+        
 
-        private void FirstAccessInfo(GameUserDto currentUser, GameUserDto[] otherUsers)
+        private void FirstAccessInfo(GameUserDto currentPlayer, GameUserDto[] otherUsers)
         {
-            this.currentUser = currentUser;
-            this.otherUsers = otherUsers.ToDictionary((user) => user.userId);
+            this.currentPlayer = currentPlayer;
+            this.otherPlayers = otherUsers.ToDictionary((user) => user.userId);
             
             GameSceneManager.instance.LoadScene(GameSceneName.MainScene);
         }
