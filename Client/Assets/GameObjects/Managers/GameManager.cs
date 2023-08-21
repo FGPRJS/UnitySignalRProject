@@ -6,6 +6,7 @@ using GameObjects.Characters;
 using Protocol;
 using Protocol.MessageBody;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameObjects.Managers
 {
@@ -15,6 +16,8 @@ namespace GameObjects.Managers
 
         public GameUserDto currentPlayer { get; private set; }
         public Dictionary<string, GameUserDto> otherPlayers { get; private set; }
+        public UnityEvent<GameUserDto> newUserConnectedEvent;
+        public UnityEvent<GameUserDto> userDisconnectedEvent;
         
         private void Awake()
         {
@@ -28,15 +31,6 @@ namespace GameObjects.Managers
             StartCoroutine(WaitForConnectionManager());
         }
         
-
-        private void FirstAccessInfo(GameUserDto currentPlayer, GameUserDto[] otherUsers)
-        {
-            this.currentPlayer = currentPlayer;
-            this.otherPlayers = otherUsers.ToDictionary((user) => user.userId);
-            
-            GameSceneManager.instance.LoadScene(GameSceneName.MainScene);
-        }
-
         IEnumerator WaitForConnectionManager()
         {
             while((ConnectionManager.instance == null) 
@@ -46,7 +40,23 @@ namespace GameObjects.Managers
             }
             
             ConnectionManager.instance.signalR.On<GameUserDto, GameUserDto[]>(
-                Protocol.MessageNameKey.FirstAccessInfo, FirstAccessInfo);
+                Protocol.MessageNameKey.FirstAccessInfo, 
+                (current, otherUsers) =>
+                {
+                    this.currentPlayer = current;
+                    this.otherPlayers = otherUsers.ToDictionary((user) => user.userId);
+                
+                    GameSceneManager.instance.LoadScene(GameSceneName.MainScene);
+                });
+            
+            ConnectionManager.instance.signalR.On<GameUserDto>(
+                Protocol.MessageNameKey.UserConnected, 
+                (user) =>
+                {
+                    this.otherPlayers.Add(user.userId, user);
+                    
+                    newUserConnectedEvent.Invoke(user);
+                });
         }
     }
 }
