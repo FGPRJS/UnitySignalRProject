@@ -1,5 +1,6 @@
 
 
+using Microsoft.AspNetCore.StaticFiles;
 using Server.Hubs;
 using Server.Manager;
 
@@ -21,7 +22,17 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    ContentTypeProvider = new FileExtensionContentTypeProvider()
+    {
+        Mappings =
+        {
+            [".wasm"] = "application/octet-stream",
+            [".data"] = "application/octet-stream"
+        }
+    }
+});
 
 app.UseAuthorization();
 

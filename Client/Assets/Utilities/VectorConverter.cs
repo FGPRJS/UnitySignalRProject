@@ -1,29 +1,36 @@
+using UnityEngine;
+
 namespace Utilities
 {
     public static class VectorConverter
     {
-        public static UnityEngine.Vector3 ToUnityVector3(string vectorString)
+        public static Vector3 ToUnityVector3(string vectorString)
         {
+            if (vectorString == null)
+            {
+                return new Vector3(0, 0, 0);
+            }
+            
             var vectors = vectorString.Split(',');
             
-            return new UnityEngine.Vector3(
+            return new Vector3(
                 float.Parse(vectors[0]),
                 float.Parse(vectors[1]),
                 float.Parse(vectors[2]));
         }
         
-        public static UnityEngine.Vector2 ToUnityVector2(string vectorString)
+        public static Vector2 ToUnityVector2(string vectorString)
         {
+            if (vectorString == null)
+            {
+                return new Vector2(0, 0);
+            }
+            
             var vectors = vectorString.Split(',');
             
-            return new UnityEngine.Vector2(
+            return new Vector2(
                 float.Parse(vectors[0]),
                 float.Parse(vectors[1]));
-        }
-
-        public static string ToString(UnityEngine.Vector3 unityVector)
-        {
-            return $"{unityVector.x},{unityVector.y},{unityVector.z}";
         }
     }
 }

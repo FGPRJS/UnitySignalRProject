@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using Protocol;
 using Protocol.MessageBody;
 using Server.Manager;
@@ -25,7 +26,8 @@ namespace Server.Hubs
         {
             var disconnectedGameUser = this._gameServerManager.RemoveGameUser(Context.ConnectionId);
 
-            await Clients.Others.SendAsync(MessageNameKey.UserDisconnected, disconnectedGameUser);
+            await Clients.Others.SendAsync(MessageNameKey.UserDisconnected, 
+                JsonConvert.SerializeObject(disconnectedGameUser));
 
             await base.OnDisconnectedAsync(exception);
         }
@@ -37,13 +39,21 @@ namespace Server.Hubs
             var newUser = this._gameServerManager.CreateGameUser(Context.ConnectionId, nickname);
             var allUser = this._gameServerManager.GetAllUsers();
 
-            await Clients.Caller.SendAsync(MessageNameKey.FirstAccessInfo, newUser, allUser);
-            await Clients.Others.SendAsync(MessageNameKey.UserConnected, newUser);
+            var serializedNewUser = JsonConvert.SerializeObject(newUser);
+
+            await Clients.Caller.SendAsync(MessageNameKey.FirstAccessInfo,
+                serializedNewUser,
+                JsonConvert.SerializeObject(allUser));
+            await Clients.Others.SendAsync(MessageNameKey.UserConnected,
+                JsonConvert.SerializeObject(newUser));
         }
 
-        public async Task CharacterMovement(CharacterMovement movement)
+        public async Task CharacterMovement(string movementRaw)
         {
-            await Clients.All.SendAsync(MessageNameKey.CharacterMovement, movement);
+            var movement = JsonConvert.DeserializeObject<CharacterMovement>(movementRaw);
+
+            await Clients.All.SendAsync(MessageNameKey.CharacterMovement,
+                JsonConvert.SerializeObject(movement));
         }
                
     }

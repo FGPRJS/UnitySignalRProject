@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using GameObjects.Characters;
 using GameObjects.Locations;
+using Newtonsoft.Json;
 using Protocol;
 using Protocol.MessageBody;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace GameObjects.Managers
         private void OnEnable()
         {
             this._playerInputActions.Character.Enable();
-            ConnectionManager.instance.signalR.On<CharacterMovement>(
+            ConnectionManager.instance.signalR.On<string>(
                 MessageNameKey.CharacterMovement, ApplyCharacterMovement);
             GameManager.instance.newUserConnectedEvent.AddListener(newUser =>
             {
@@ -53,8 +54,10 @@ namespace GameObjects.Managers
             this._playerInputActions.Character.Disable();
         }
 
-        private void ApplyCharacterMovement(CharacterMovement characterMovement)
+        private void ApplyCharacterMovement(string characterMovementRaw)
         {
+            var characterMovement = JsonConvert.DeserializeObject<CharacterMovement>(characterMovementRaw);
+            
             var movement = VectorConverter.ToUnityVector2(characterMovement.movement);
 
             Character targetCharacter = null;
@@ -136,12 +139,12 @@ namespace GameObjects.Managers
             var moveInput = this._playerInputActions.Character.Move.ReadValue<Vector2>();
 
             ConnectionManager.instance.signalR.Invoke(
-                MessageNameKey.CharacterMovement, new CharacterMovement()
+                MessageNameKey.CharacterMovement, JsonConvert.SerializeObject(new CharacterMovement()
             {
                 userId = GameManager.instance.currentPlayer.userId,
                 movement = $"{moveInput.x},{moveInput.y}",
                 rotation = ""
-            });
+            }));
         }
     }
 }

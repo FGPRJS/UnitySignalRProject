@@ -182,3 +182,5 @@ $RECYCLE.BIN/
 
 # Remove resources
 Assets/Imports/*
+Assets/Packages/*
+Bin/*

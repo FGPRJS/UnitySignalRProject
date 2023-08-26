@@ -1,9 +1,12 @@
-﻿namespace Protocol.MessageBody
+﻿using System;
+
+namespace Protocol.MessageBody
 {
+    [Serializable]
     public class CharacterMovement
     {
-        public string userId { get; set; }
-        public string movement { get; set; }
-        public string rotation { get; set; }
+        public string userId;
+        public string movement;
+        public string rotation;
     }
 }

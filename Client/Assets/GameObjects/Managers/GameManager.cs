@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GameObjects.Characters;
+using Newtonsoft.Json;
 using Protocol;
 using Protocol.MessageBody;
 using UnityEngine;
@@ -39,20 +38,31 @@ namespace GameObjects.Managers
                 yield return null;
             }
             
-            ConnectionManager.instance.signalR.On<GameUserDto, GameUserDto[]>(
-                Protocol.MessageNameKey.FirstAccessInfo, 
-                (current, otherUsers) =>
+            ConnectionManager.instance.signalR.On<string, string>(
+                MessageNameKey.FirstAccessInfo, 
+                (currentRaw, otherUsersRaw) =>
                 {
-                    this.currentPlayer = current;
+                    Debug.Log(currentRaw);
+                    Debug.Log(otherUsersRaw);
+
+                    this.currentPlayer = JsonConvert.DeserializeObject<GameUserDto>(currentRaw);
+                    var otherUsers = JsonConvert.DeserializeObject<List<GameUserDto>>(otherUsersRaw);
+                    
+                    Debug.Log(this.currentPlayer);
+                    
                     this.otherPlayers = otherUsers.ToDictionary((user) => user.userId);
                 
+                    Debug.Log(this.otherPlayers);
+                    
                     GameSceneManager.instance.LoadScene(GameSceneName.MainScene);
                 });
             
-            ConnectionManager.instance.signalR.On<GameUserDto>(
-                Protocol.MessageNameKey.UserConnected, 
-                (user) =>
+            ConnectionManager.instance.signalR.On<string>(
+                MessageNameKey.UserConnected, 
+                (userRaw) =>
                 {
+                    var user = JsonConvert.DeserializeObject<GameUserDto>(userRaw);
+                    
                     this.otherPlayers.Add(user.userId, user);
                     
                     newUserConnectedEvent.Invoke(user);

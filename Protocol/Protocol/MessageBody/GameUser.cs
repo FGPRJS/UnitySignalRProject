@@ -1,33 +1,37 @@
-﻿namespace Protocol.MessageBody
+﻿using System;
+
+namespace Protocol.MessageBody
 {
+    [Serializable]
     public class GameUser
     {
-        public string connectionId { get; set; }
+        public string connectionId;
 
-        public string userId { get; set; }
-        public string nickname { get; set; }
+        public string userId;
+        public string nickname;
 
-        public int spawnToken { get; set; }
-        public long spawnTime { get; set; }
+        public int spawnToken;
+        public long spawnTime;
 
-        public string? positionString { get; set; }
-        public string? bodyRotationString { get; set; }
-        public string? headRotationString { get; set; }
-        public string? cannonRotationString { get; set; }
+        public string? positionString;
+        public string? bodyRotationString;
+        public string? headRotationString;
+        public string? cannonRotationString;
     }
 
+    [Serializable]
     public class GameUserDto
     {
-        public string userId { get; set; }
-        public string nickname { get; set; }
+        public string userId;
+        public string nickname;
 
 
-        public int spawnToken { get; set; }
-        public long spawnTime { get; set; }
+        public int spawnToken;
+        public long spawnTime;
 
-        public string positionString { get; set; }
-        public string bodyRotationString { get; set; }
-        public string headRotationString { get; set; }
-        public string cannonRotationString { get; set; }
+        public string? positionString;
+        public string? bodyRotationString;
+        public string? headRotationString;
+        public string? cannonRotationString;
     }
 }

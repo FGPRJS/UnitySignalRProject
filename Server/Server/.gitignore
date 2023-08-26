@@ -301,3 +301,5 @@ $RECYCLE.BIN/
 
 # Remove config files
 *.json
+/Server/bin
+/Server/wwwroot
