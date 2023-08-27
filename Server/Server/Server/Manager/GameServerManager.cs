@@ -49,5 +49,10 @@ namespace Server.Manager
 
             return user?.Adapt<GameUserDto>();
         }
+
+        public void RefreshUserPosition(string connectionId, string position)
+        {
+            this._userInfo[connectionId].positionString = position;
+        }
     }
 }

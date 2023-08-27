@@ -23,6 +23,8 @@ namespace GameObjects.Managers
         [Header("[Control]")] 
         private PlayerInputActions _playerInputActions;
 
+        public float dismatchDistanceStandard = 10;
+
         private Character _playerCharacter;
         private Dictionary<string, Character> _otherPlayerCharacter;
         
@@ -75,6 +77,13 @@ namespace GameObjects.Managers
             
             if (targetCharacter != null)
             {
+                var receivedPosition = VectorConverter.ToUnityVector3(characterMovement.position);
+
+                if (Vector3.Distance(targetCharacter.transform.position, receivedPosition) > dismatchDistanceStandard)
+                {
+                    targetCharacter.transform.position = receivedPosition;
+                }
+                
                 targetCharacter.MoveCharacter(movement);
             }
         }
@@ -137,13 +146,15 @@ namespace GameObjects.Managers
         private void FixedUpdate()
         {
             var moveInput = this._playerInputActions.Character.Move.ReadValue<Vector2>();
+            var position = this._playerCharacter.transform.position;
 
             ConnectionManager.instance.signalR.Invoke(
                 MessageNameKey.CharacterMovement, JsonConvert.SerializeObject(new CharacterMovement()
             {
                 userId = GameManager.instance.currentPlayer.userId,
                 movement = $"{moveInput.x},{moveInput.y}",
-                rotation = ""
+                rotation = "",
+                position = $"{position.x},{position.y},{position.z}"
             }));
         }
     }

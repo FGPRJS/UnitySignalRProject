@@ -8,5 +8,6 @@ namespace Protocol.MessageBody
         public string userId;
         public string movement;
         public string rotation;
+        public string position;
     }
 }

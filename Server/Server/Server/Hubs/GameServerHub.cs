@@ -41,16 +41,18 @@ namespace Server.Hubs
 
             var serializedNewUser = JsonConvert.SerializeObject(newUser);
 
+            await Clients.Others.SendAsync(MessageNameKey.UserConnected,
+                serializedNewUser);
             await Clients.Caller.SendAsync(MessageNameKey.FirstAccessInfo,
                 serializedNewUser,
                 JsonConvert.SerializeObject(allUser));
-            await Clients.Others.SendAsync(MessageNameKey.UserConnected,
-                JsonConvert.SerializeObject(newUser));
         }
 
         public async Task CharacterMovement(string movementRaw)
         {
             var movement = JsonConvert.DeserializeObject<CharacterMovement>(movementRaw);
+
+            this._gameServerManager.RefreshUserPosition(Context.ConnectionId, movement.position);
 
             await Clients.All.SendAsync(MessageNameKey.CharacterMovement,
                 JsonConvert.SerializeObject(movement));
