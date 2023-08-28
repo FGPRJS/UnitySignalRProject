@@ -968,6 +968,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 136932151082279250, guid: 73fd9a20eae1cd74b8b5fbcea299bf5c, type: 3}
+      propertyPath: connectionString
+      value: http://signalrserver.peachpeach.net:19999/gameserver
+      objectReference: {fileID: 0}
     - target: {fileID: 7738130748928224036, guid: 73fd9a20eae1cd74b8b5fbcea299bf5c, type: 3}
       propertyPath: m_RootOrder
       value: 0

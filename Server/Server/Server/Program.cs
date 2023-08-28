@@ -1,14 +1,12 @@
-
-
 using Microsoft.AspNetCore.StaticFiles;
 using Server.Hubs;
 using Server.Manager;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Add services to the container.
+
+builder.Host.UseContentRoot(Directory.GetCurrentDirectory());
 
 builder.Services.AddSignalR();
 
@@ -39,5 +37,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<GameServerHub>("/gameserver");
+app.MapGet("/", () =>
+{
+    var html = File.ReadAllText(@"./wwwroot/index.html");
+
+    return Results.Text(html, "text/html");
+});
 
 app.Run();

@@ -37,7 +37,7 @@ namespace GameObjects.Managers
                 Debug.Log("Connection closed.");
             };
             #endregion
-
+            
             this.signalR.Connect();
         }
 
