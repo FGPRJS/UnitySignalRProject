@@ -52,7 +52,7 @@ namespace Server.Hubs
         {
             var movement = JsonConvert.DeserializeObject<CharacterMovement>(movementRaw);
 
-            this._gameServerManager.RefreshUserPosition(Context.ConnectionId, movement.position);
+            this._gameServerManager.RefreshUserPosition(Context.ConnectionId, movement.position, movement.rotation);
 
             await Clients.All.SendAsync(MessageNameKey.CharacterMovement,
                 JsonConvert.SerializeObject(movement));

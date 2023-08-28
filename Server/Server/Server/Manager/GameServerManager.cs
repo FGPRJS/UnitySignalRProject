@@ -50,9 +50,10 @@ namespace Server.Manager
             return user?.Adapt<GameUserDto>();
         }
 
-        public void RefreshUserPosition(string connectionId, string position)
+        public void RefreshUserPosition(string connectionId, string position, string bodyRotation)
         {
             this._userInfo[connectionId].positionString = position;
+            this._userInfo[connectionId].bodyRotationString = bodyRotation;
         }
     }
 }

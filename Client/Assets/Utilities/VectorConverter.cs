@@ -32,5 +32,21 @@ namespace Utilities
                 float.Parse(vectors[0]),
                 float.Parse(vectors[1]));
         }
+        
+        public static Quaternion ToUnityQuaternion(string quaternionString)
+        {
+            if (quaternionString == null)
+            {
+                return new Quaternion(0, 0, 0, 0);
+            }
+            
+            var quaternions = quaternionString.Split(',');
+            
+            return new Quaternion(
+                float.Parse(quaternions[0]),
+                float.Parse(quaternions[1]),
+                float.Parse(quaternions[2]),
+                float.Parse(quaternions[3]));
+        }
     }
 }

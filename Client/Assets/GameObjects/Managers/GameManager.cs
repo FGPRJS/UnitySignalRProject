@@ -15,8 +15,6 @@ namespace GameObjects.Managers
 
         public GameUserDto currentPlayer { get; private set; }
         public Dictionary<string, GameUserDto> otherPlayers { get; private set; }
-        public UnityEvent<GameUserDto> newUserConnectedEvent;
-        public UnityEvent<GameUserDto> userDisconnectedEvent;
         
         private void Awake()
         {
@@ -64,8 +62,15 @@ namespace GameObjects.Managers
                     var user = JsonConvert.DeserializeObject<GameUserDto>(userRaw);
                     
                     this.otherPlayers.Add(user.userId, user);
-                    
-                    newUserConnectedEvent.Invoke(user);
+                });
+            
+            ConnectionManager.instance.signalR.On<string>(
+                MessageNameKey.UserDisconnected,
+                (disconnectedUserRaw) =>
+                {
+                    var disconnectedUser = JsonConvert.DeserializeObject<GameUserDto>(disconnectedUserRaw);
+
+                    this.otherPlayers.Remove(disconnectedUser.userId);
                 });
         }
     }
