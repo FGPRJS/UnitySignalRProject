@@ -9,7 +9,7 @@ namespace Server.Controllers
         [HttpGet]
         public ContentResult Index()
         {
-            var html = System.IO.File.ReadAllText(@"./wwwroot/index.html");
+            var html = System.IO.File.ReadAllText(@"./wwwroot/HomeIndex.html");
 
             return base.Content(html, "text/html");
         }

@@ -303,3 +303,4 @@ $RECYCLE.BIN/
 *.json
 /Server/bin
 /Server/wwwroot
+gameserver.service

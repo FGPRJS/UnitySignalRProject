@@ -13,7 +13,7 @@ builder.Services.AddSignalR();
 builder.Services.AddSingleton<GameConstantManager>();
 builder.Services.AddSingleton<GameServerManager>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 
 // Configure the HTTP request pipeline.
