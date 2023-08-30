@@ -38,11 +38,8 @@ namespace GameObjects.Managers
         private void OnEnable()
         {
             this._playerInputActions.Character.Enable();
-            ConnectionManager.instance.signalR.On<string>(
-                MessageNameKey.CharacterMovement, (characterMovementRaw) =>
+            GameManager.instance.CharacterMovementEvent.AddListener(characterMovement =>
                 {
-                    var characterMovement = JsonConvert.DeserializeObject<CharacterMovement>(characterMovementRaw);
-            
                     var movement = VectorConverter.ToUnityVector2(characterMovement.movement);
 
                     Character targetCharacter = null;
@@ -73,33 +70,26 @@ namespace GameObjects.Managers
                         targetCharacter.MoveCharacter(movement);
                     }
                 });
-            ConnectionManager.instance.signalR.On<string>(
-                MessageNameKey.UserDisconnected, (disconnectedUserRaw) =>
+            GameManager.instance.UserDisconnectedEvent.AddListener( disconnectedUser =>
                 {
-                    var disconnectedUser = JsonConvert.DeserializeObject<GameUserDto>(disconnectedUserRaw);
-
                     this._otherPlayerCharacter.Remove(disconnectedUser.userId, out var otherPlayer);
                     
-                    Object.Destroy(otherPlayer.gameObject);
+                    Destroy(otherPlayer.gameObject);
                 });
-            ConnectionManager.instance.signalR.On<string>(
-                MessageNameKey.UserConnected,
-                connectedUserRaw =>
+            GameManager.instance.UserConnectedEvent.AddListener(connectedUser =>
                 {
-                    var connectedUser = JsonConvert.DeserializeObject<GameUserDto>(connectedUserRaw);
-                
-                var otherPlayerPosition = 
-                    VectorConverter.ToUnityVector3(connectedUser.positionString);
-                var otherPlayerBodyRotation =
-                    VectorConverter.ToUnityQuaternion(connectedUser.bodyRotationString);
+                    var otherPlayerPosition = 
+                        VectorConverter.ToUnityVector3(connectedUser.positionString);
+                    var otherPlayerBodyRotation =
+                        VectorConverter.ToUnityQuaternion(connectedUser.bodyRotationString);
 
-                var newOtherPlayerCharacter = AddNewCharacter(
-                    connectedUser, 
-                    otherPlayerPosition,
-                    otherPlayerBodyRotation);
-                
-                this._otherPlayerCharacter.Add(connectedUser.userId, newOtherPlayerCharacter);
-            });
+                    var newOtherPlayerCharacter = AddNewCharacter(
+                        connectedUser, 
+                        otherPlayerPosition,
+                        otherPlayerBodyRotation);
+                    
+                    this._otherPlayerCharacter.Add(connectedUser.userId, newOtherPlayerCharacter);
+                });
         }
 
         private void OnDisable()

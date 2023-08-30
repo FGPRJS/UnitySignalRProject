@@ -69,6 +69,7 @@ $RECYCLE.BIN/
 
 #Build / Dist
 dist/*
+build/*
 
 #remove -lock file
 package-lock.json

@@ -21,8 +21,23 @@ namespace GameObjects.Characters
         private float moveSpeed = 1.0f;
         private float rotateSpeed = 1.0f;
 
+        private float maxHeartBeatTimeout = 5.0f;
+        private float currentHeartBeatTimeout = 0f;
+
+        private void FixedUpdate()
+        {
+            currentHeartBeatTimeout += Time.deltaTime;
+
+            if (currentHeartBeatTimeout >= maxHeartBeatTimeout)
+            {
+                Destroy(this);
+            }
+        }
+
         public void MoveCharacter(Vector2 movement)
         {
+            currentHeartBeatTimeout = 0;
+            
             this._rBody.velocity += this._rBody.transform.forward * (movement.y * this.moveSpeed);
             this._rBody.rotation *= Quaternion.Euler(Vector3.up * (movement.x * rotateSpeed));
         }

@@ -15,6 +15,10 @@ namespace GameObjects.Managers
 
         public GameUserDto currentPlayer { get; private set; }
         public Dictionary<string, GameUserDto> otherPlayers { get; private set; }
+
+        public UnityEvent<GameUserDto> UserConnectedEvent;
+        public UnityEvent<GameUserDto> UserDisconnectedEvent;
+        public UnityEvent<CharacterMovement> CharacterMovementEvent;
         
         private void Awake()
         {
@@ -40,37 +44,40 @@ namespace GameObjects.Managers
                 MessageNameKey.FirstAccessInfo, 
                 (currentRaw, otherUsersRaw) =>
                 {
-                    Debug.Log(currentRaw);
-                    Debug.Log(otherUsersRaw);
-
                     this.currentPlayer = JsonConvert.DeserializeObject<GameUserDto>(currentRaw);
                     var otherUsers = JsonConvert.DeserializeObject<List<GameUserDto>>(otherUsersRaw);
                     
-                    Debug.Log(this.currentPlayer);
-                    
                     this.otherPlayers = otherUsers.ToDictionary((user) => user.userId);
                 
-                    Debug.Log(this.otherPlayers);
-                    
                     GameSceneManager.instance.LoadScene(GameSceneName.MainScene);
                 });
             
             ConnectionManager.instance.signalR.On<string>(
-                MessageNameKey.UserConnected, 
-                (userRaw) =>
+                MessageNameKey.UserConnected,(userRaw) =>
                 {
                     var user = JsonConvert.DeserializeObject<GameUserDto>(userRaw);
                     
                     this.otherPlayers.Add(user.userId, user);
+                    
+                    this.UserConnectedEvent.Invoke(user);
                 });
             
             ConnectionManager.instance.signalR.On<string>(
-                MessageNameKey.UserDisconnected,
-                (disconnectedUserRaw) =>
+                MessageNameKey.UserDisconnected,(disconnectedUserRaw) =>
                 {
                     var disconnectedUser = JsonConvert.DeserializeObject<GameUserDto>(disconnectedUserRaw);
 
                     this.otherPlayers.Remove(disconnectedUser.userId);
+                    
+                    this.UserDisconnectedEvent.Invoke(disconnectedUser);
+                });
+
+            ConnectionManager.instance.signalR.On<string>(
+                MessageNameKey.CharacterMovement, (characterMovementRaw) =>
+                {
+                    var characterMovement = JsonConvert.DeserializeObject<CharacterMovement>(characterMovementRaw);
+                    
+                    this.CharacterMovementEvent.Invoke(characterMovement);
                 });
         }
     }

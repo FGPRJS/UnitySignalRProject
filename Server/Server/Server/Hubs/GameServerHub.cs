@@ -36,9 +36,9 @@ namespace Server.Hubs
 
         public async Task FirstAccessInfo(string nickname)
         {
-            var newUser = this._gameServerManager.CreateGameUser(Context.ConnectionId, nickname);
             var allUser = this._gameServerManager.GetAllUsers();
-
+            var newUser = this._gameServerManager.CreateGameUser(Context.ConnectionId, nickname);
+            
             var serializedNewUser = JsonConvert.SerializeObject(newUser);
 
             await Clients.Others.SendAsync(MessageNameKey.UserConnected,

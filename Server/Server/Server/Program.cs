@@ -26,7 +26,7 @@ app.UseStaticFiles(new StaticFileOptions()
     {
         Mappings =
         {
-            [".wasm"] = "application/octet-stream",
+            [".wasm"] = "application/wasm",
             [".data"] = "application/octet-stream"
         }
     }
